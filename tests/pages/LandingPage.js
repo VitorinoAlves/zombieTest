@@ -24,13 +24,6 @@ export class LandingPage{
         await this.page.getByTestId('modal').getByText('Quero entrar na fila!').click();
     }
 
-    async toastHaveText(toastText){
-        const toast = this.page.locator('.toast');
-
-        await expect(toast).toHaveText(toastText);
-        await expect(toast).toBeHidden({timeout: 5000});
-    }
-
     async alertHaveText(target){
         await expect(this.page.locator('.alert')).toHaveText(target);
     }
