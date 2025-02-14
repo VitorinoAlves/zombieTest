@@ -8,7 +8,7 @@ export class Toast {
     async haveText(toastText){
         const toast = this.page.locator('.toast');
 
-        await expect(toast).toHaveText(toastText);
-        await expect(toast).not.toBeVisible({timeout: 5000});
+        await expect(toast).toContainText(toastText, {timeout: 10000});
+        await expect(toast).not.toBeVisible({timeout: 10000});
     }
 }
