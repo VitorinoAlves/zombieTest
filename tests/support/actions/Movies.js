@@ -1,20 +1,28 @@
 const { expect } = require("@playwright/test");
 
-export class MoviesPage {
+export class Movies {
     constructor(page){
         this.page = page;
     }
 
-    async isLoggedIn(){
+    /*async isLoggedIn(){
             await this.page.waitForLoadState('networkidle');
             await expect(this.page).toHaveURL(/.*admin/);
             
             /*const logoutLink = this.page.locator('a[href="/logout"]');
             await expect(logoutLink).toBeVisible();*/
+    //}
+
+    async goForm(){
+        await this.page.locator('a[href$="register"]').click();
     }
 
-    async create(title, overview, company, releas_year){
-        await this.page.locator('a[href$="register"]').click();
+    async submit(){
+        await this.page.getByRole('button', {name: 'Cadastrar'}).click();
+    }
+
+    async create(title, overview, company, releas_year, cover, featured){
+        await this.goForm();
         await this.page.getByLabel('Titulo do filme').fill(title);
         await this.page.getByLabel('Sinopse').fill(overview);
 
@@ -32,6 +40,17 @@ export class MoviesPage {
             .filter({hasText: releas_year})
             .click();
 
-        await this.page.getByRole('button', {name: 'Cadastrar'}).click();
+        await this.page.locator('input[name=cover]')
+            .setInputFiles('tests/support/fixtures' + cover);
+
+        if(featured){
+            await this.page.locator('.featured .react-switch').click();
+        }        
+
+        await this.submit();
+    }
+
+    async alertHaveText(target){
+        await expect(this.page.locator('.alert')).toHaveText(target);
     }
 }

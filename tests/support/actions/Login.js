@@ -1,8 +1,14 @@
 const { expect } = require("@playwright/test");
 
-export class LoginPage {
+export class Login {
     constructor(page){
         this.page = page;
+    }
+
+    async do(email, password, userName){
+        await this.visit();
+        await this.submit(email, password);
+        await this.isLoggedIn(userName);
     }
 
     async visit(){
@@ -21,6 +27,15 @@ export class LoginPage {
     async alertHaveText(text){
         const alert= this.page.locator('span[class$=alert]');
         await expect(alert).toHaveText(text);
+    }
+
+
+    async isLoggedIn(userName){
+        const loggedUser = this.page.locator('.logged-user');
+        await expect(loggedUser).toHaveText(`Olá, ${userName}`);
+        
+        /*const logoutLink = this.page.locator('a[href="/logout"]');
+        await expect(logoutLink).toBeVisible();*/
     }
 
     
